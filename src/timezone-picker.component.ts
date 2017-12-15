@@ -69,6 +69,11 @@ export class TimezonePickerComponent implements AfterViewInit {
   @Input() allowClear: boolean = false;
 
   /**
+   * Input to display timezone offset in options
+   */
+  @Input() displayOffset = true;
+
+  /**
    * Input (optional) bound to [disabled]
    */
   @Input() disabled: boolean = false;
@@ -127,7 +132,7 @@ export class TimezonePickerComponent implements AfterViewInit {
       let countryZones: Zone[] = zones.filter(z => z.cca2 === country.cca2);
       countryZones.forEach(zone => {
         zone.offset = momentTimezone().tz(zone.name).format('Z');
-        const displayName = '(GMT' + zone.offset + ') ' + zone.name;
+        const displayName = this.displayOffset? '(GMT' + zone.offset + ') ' + zone.name: zone.name;
         r.Timezones.push({
           name: zone.name,
           offset: zone.offset,
