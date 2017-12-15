@@ -20,7 +20,7 @@ interface Zone {
    */
   name: string;
 
-  offset: string
+  offset?: string
 }
 
 interface Code {
