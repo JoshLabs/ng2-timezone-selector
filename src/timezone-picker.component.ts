@@ -53,7 +53,7 @@ interface Timezone {
   <select #select id="select" class="form-control" [disabled]="disabled">
     <option></option>
     <optgroup *ngFor="let c of allTimezones" [label]="c.Country">
-      <option *ngFor="let t of c.Timezones" [value]="t.name">{{t.displayName}}</option>
+      <option *ngFor="let t of c.Timezones" [value]="t.name">{{displayOffset ? t.offset + t.name: t.name}}</option>
     </optgroup>
   </select>`
 })
@@ -132,11 +132,9 @@ export class TimezonePickerComponent implements AfterViewInit {
       let countryZones: Zone[] = zones.filter(z => z.cca2 === country.cca2);
       countryZones.forEach(zone => {
         zone.offset = momentTimezone().tz(zone.name).format('Z');
-        const displayName = this.displayOffset? '(GMT' + zone.offset + ') ' + zone.name: zone.name;
         r.Timezones.push({
           name: zone.name,
-          offset: zone.offset,
-          displayName: displayName
+          offset: '(GMT' + zone.offset + ') ',
         });
       });
       result.push(r);
