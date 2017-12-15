@@ -1,5 +1,7 @@
 import { Component, Output, Input, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, AfterViewInit, trigger, OnChanges } from '@angular/core';
 
+import * as momentTimezone from 'moment-timezone';
+
 declare let $: any; // Enable use of jQuery
 
 interface Zone {
@@ -17,6 +19,8 @@ interface Zone {
    * Timezone name, e.g.: 'Europe/Berlin'
    */
   name: string;
+
+  offset: string
 }
 
 interface Code {
@@ -40,7 +44,7 @@ interface Timezone {
   /**
    * Timezone name array
    */
-  Timezones: string[];
+  Timezones: object[];
 }
 
 @Component({
@@ -49,7 +53,7 @@ interface Timezone {
   <select #select id="select" class="form-control" [disabled]="disabled">
     <option></option>
     <optgroup *ngFor="let c of allTimezones" [label]="c.Country">
-      <option *ngFor="let t of c.Timezones" [value]="t">{{t}}</option>
+      <option *ngFor="let t of c.Timezones" [value]="t.name">{{t.displayName}}</option>
     </optgroup>
   </select>`
 })
@@ -122,7 +126,13 @@ export class TimezonePickerComponent implements AfterViewInit {
       let r: Timezone = { Country: country.name, Timezones: [] };
       let countryZones: Zone[] = zones.filter(z => z.cca2 === country.cca2);
       countryZones.forEach(zone => {
-        r.Timezones.push('(GMT+5:30)' + zone.name);
+        zone.offset = momentTimezone().tz(zone.name).format('ZZ');
+        const displayName = '(' + zone.offset + ') ' + zone.name;
+        r.Timezones.push({
+          name: zone.name,
+          offset: zone.offset,
+          displayName: displayName
+        });
       });
       result.push(r);
     });
