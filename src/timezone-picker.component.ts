@@ -122,7 +122,7 @@ export class TimezonePickerComponent implements AfterViewInit {
       let r: Timezone = { Country: country.name, Timezones: [] };
       let countryZones: Zone[] = zones.filter(z => z.cca2 === country.cca2);
       countryZones.forEach(zone => {
-        r.Timezones.push(zone.name);
+        r.Timezones.push('(GMT+5:30)' + zone.name);
       });
       result.push(r);
     });
