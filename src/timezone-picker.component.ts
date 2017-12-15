@@ -126,8 +126,8 @@ export class TimezonePickerComponent implements AfterViewInit {
       let r: Timezone = { Country: country.name, Timezones: [] };
       let countryZones: Zone[] = zones.filter(z => z.cca2 === country.cca2);
       countryZones.forEach(zone => {
-        zone.offset = momentTimezone().tz(zone.name).format('ZZ');
-        const displayName = '(' + zone.offset + ') ' + zone.name;
+        zone.offset = momentTimezone().tz(zone.name).format('Z');
+        const displayName = '(GMT' + zone.offset + ') ' + zone.name;
         r.Timezones.push({
           name: zone.name,
           offset: zone.offset,
